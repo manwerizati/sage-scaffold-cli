@@ -1,0 +1,12 @@
+{
+    "name": "dominik/php",
+    "authors": [
+        {
+            "name": "Dominik",
+            "email": "DominikBorzyszkowski12@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/console": "^8.0"
+    }
+}
