@@ -8,25 +8,28 @@ class BlockGenerator {
     }
 
     public function generate() {
-        $bladeDir = 'resources/views/sections';
-        $composerDir = 'app/View/Composers/';
+        $files = [
+            "blade" => [
+              'dir' => "resources/views/sections",
+              'stub' => "stubs/blade.stub",
+              'ext' => ".blade.php",
+            ],
+            "composer" => [
+                'dir' => "app/View/Composers/",
+                'stub' => "stubs/composer.stub",
+                'ext' => ".php",
+            ]
+        ];
 
-        if (!is_dir($bladeDir)) {
-            mkdir($bladeDir, 0777, true);
+        foreach ($files as $file) {
+            if (!is_dir($file['dir'])) {
+                mkdir($file['dir'], 0777, true);
+            }
+
+            $fileContent = file_get_contents($file['stub']);
+            $fileContent = str_replace("{{ NAME }}", $this->blockName, $fileContent);
+            $filePath = $file['dir'] . '/' . $this->blockName . $file['ext'];
+            file_put_contents($filePath, $fileContent);
         }
-
-        if (!is_dir($composerDir)) {
-            mkdir($composerDir, 0777, true);
-        }
-
-        $bladeContent = file_get_contents('stubs/blade.stub');
-        $bladeContent = str_replace("{{ NAME }}", $this->blockName, $bladeContent);
-        $bladeFilePath = $bladeDir . '/' . $this->blockName . ".blade.php";
-        file_put_contents($bladeFilePath, $bladeContent);
-
-        $composerContent = file_get_contents('stubs/composer.stub');
-        $composerContent = str_replace("{{ NAME }}", $this->blockName, $composerContent);
-        $composerFilePath = $composerDir . '/' . $this->blockName . ".php";
-        file_put_contents($composerFilePath, $composerContent);
     }
 }

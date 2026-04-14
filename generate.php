@@ -9,5 +9,5 @@ if (!isset($argv[1])) {
 
 $blockName = $argv[1];
 
-$generator = new BlockGenerator($blockName, 'template.stub');
+$generator = new BlockGenerator($blockName);
 $generator->generate();
