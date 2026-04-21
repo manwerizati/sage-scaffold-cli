@@ -1,0 +1,17 @@
+<?php
+
+namespace App\View\Composers;
+
+use Roots\Acorn\View\Composer;
+
+class {{ PASCAL_NAME }} extends Composer
+{
+    protected $views = [
+        'sections.{{ KEBAB_NAME }}',
+    ];
+
+    public function title()
+    {
+        return '{{ NAME }}';
+    }
+}
