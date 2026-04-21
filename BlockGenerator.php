@@ -7,17 +7,37 @@ class BlockGenerator {
         $this->blockName = $blockName;
     }
 
-    public function generate() {
+    private function toPascalCase($string)
+    {
+        $spaces = preg_replace('/[-_]+/', ' ', $string);
+        $capitalized = ucwords($spaces);
+        return str_replace(' ', '', $capitalized);
+    }
+
+    private function toKebabCase($string)
+    {
+        $string = str_replace('_', '-', $string);
+        $kebab = preg_replace('/(?<!^)([A-Z])/', '-$1', $string);
+        return strtolower($kebab);
+    }
+
+    public function generate()
+    {
+        $pascalName = $this->toPascalCase($this->blockName);
+        $kebabName = $this->toKebabCase($this->blockName);
+
         $files = [
             "blade" => [
               'dir' => "resources/views/sections",
               'stub' => "stubs/blade.stub",
               'ext' => ".blade.php",
+              'filename' => $kebabName,
             ],
             "composer" => [
                 'dir' => "app/View/Composers/",
                 'stub' => "stubs/composer.stub",
                 'ext' => ".php",
+                'filename' => $pascalName,
             ]
         ];
 
@@ -27,8 +47,8 @@ class BlockGenerator {
             }
 
             $fileContent = file_get_contents($file['stub']);
-            $fileContent = str_replace("{{ NAME }}", $this->blockName, $fileContent);
-            $filePath = $file['dir'] . '/' . $this->blockName . $file['ext'];
+            $fileContent = str_replace(["{{ NAME }}", "{{ PASCAL_NAME }}", "{{ KEBAB_NAME }}"], [$this->blockName, $pascalName, $kebabName], $fileContent);
+            $filePath = $file['dir'] . '/' . $file['filename'] . $file['ext'];
             file_put_contents($filePath, $fileContent);
         }
     }
